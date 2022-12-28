@@ -1,13 +1,19 @@
+type Coeficients = Record<string, number>;
+
+
 export class GetWorkCoefficient {
-  static run(workShift: string): number {
-    const workCoefficient = {
+
+  static run(workShift: string[]): number {
+    const workCoefficients: Coeficients = {
       matutino: 0.13,
       vespertino: 0.04,
       noturno: 0.08,
-    }[workShift];
+    };
 
-    if (!workCoefficient) throw new Error("Enter a valid work shift");
+    const employeeWorkCoefficient = workShift.reduce((acc, shift) => acc += workCoefficients[shift], 0)
 
-    return workCoefficient;
+    if (!employeeWorkCoefficient) throw new Error("Invalid workShift(s)!");
+
+    return employeeWorkCoefficient;
   }
 }
