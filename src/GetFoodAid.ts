@@ -1,5 +1,5 @@
 export class GetFoodAid {
-  static run(role: string, workCoefficient: number, grossSalary: number) {
+  static run(role: string, workCoefficient: number, grossSalary: number): number {
     const isFactoryWorker = role === "operario";
 
     const fulfillRequirements = isFactoryWorker && workCoefficient >= 25;
