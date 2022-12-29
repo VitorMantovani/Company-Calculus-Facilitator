@@ -3,6 +3,7 @@ export class GetGrossSalary {
     if (workedHours <= 0 || workedHours >= 721)
       throw new Error("Worked hours in invalid!");
 
-      return workedHours * (workCoefficient * minSalary);
+    const grossSalary = workedHours * (workCoefficient * minSalary);
+    return Number(grossSalary.toFixed(2));
   }
 }
