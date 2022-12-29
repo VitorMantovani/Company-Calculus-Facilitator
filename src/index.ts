@@ -6,53 +6,50 @@ import { GetNetSalary } from "./use-cases/getNetSalary/GetNetSalary";
 import { GetSalaryTaxRate } from "./use-cases/getSalaryTaxRate/GetSalaryTaxRate";
 import { GetWorkCoefficient } from "./use-cases/getWorkCoefficient/GetWorkCoefficient";
 
-let employee = {
-  role: "gerente",
-  workShift: ["matutino", "vespertino"],
-  workedHours: 80,
-};
+const employeeRole = "operario";
+const workShift = ["matutino", "vespertino", "noturno"];
+const workedHours = 80;
 
-const { role, workShift, workedHours } = employee;
-
-const minSalary = GetMinSalary.run(role);
+const minSalary = GetMinSalary.run(employeeRole);
 
 const workCoefficient = GetWorkCoefficient.run(workShift);
 
 const grossSalary = GetGrossSalary.run(workedHours, workCoefficient, minSalary);
 
-const taxRate = GetSalaryTaxRate.run(grossSalary, role);
+const taxRate = GetSalaryTaxRate.run(grossSalary, employeeRole);
 
 const bonus = GetBonus.run(workShift, workedHours);
 
-const foodAid = GetFoodAid.run(role, workCoefficient, grossSalary);
+const foodAid = GetFoodAid.run(employeeRole, workCoefficient, grossSalary);
 
 const netSalary = GetNetSalary.run(grossSalary, taxRate, bonus, foodAid);
 
+const employee: Record<string, any> = {};
+
 Object.assign(employee, {
-  workCoefficient: Intl.NumberFormat("pt-BR", { style: "percent" }).format(
-    workCoefficient
-  ),
-  minSalary: Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(minSalary),
-  grossSalary: Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(grossSalary),
-  foodAid: Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(foodAid),
-  bonus: Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(bonus),
-  taxRate: Intl.NumberFormat("pt-BR", { style: "percent" }).format(taxRate),
-  netSalary: Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(netSalary),
+  workShift,
+  employeeRole,
+  minSalary,
+  workCoefficient,
+  workedHours,
+  grossSalary,
+  taxRate,
+  bonus,
+  foodAid,
+  netSalary,
+});
+
+Object.keys(employee).forEach((key) => {
+  if (typeof employee[key] === "number" && key !== "workedHours") {
+    key === "workCoefficient" || key === "tax"
+      ? (employee[key] = Intl.NumberFormat("pt-BR", {
+          style: "percent",
+        }).format(employee[key]))
+      : (employee[key] = Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(employee[key]));
+  }
 });
 
 console.log(employee);
