@@ -12,7 +12,7 @@ describe("GetBonus", () => {
   });
 
   it("should be 465 if employee doesn't work more than 80 hours", () => {
-    const bonus = GetBonus.run(["matutinoi"], 80);
+    const bonus = GetBonus.run(["matutino"], 80);
     expect(bonus).toBe(465);
   });
 });
